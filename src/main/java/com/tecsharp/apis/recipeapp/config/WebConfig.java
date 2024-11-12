@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     /*
      * In case a connection is required
-     * from a framework * React, Next.js
+     * from a framework React, Next.js
      */
 
     @Override

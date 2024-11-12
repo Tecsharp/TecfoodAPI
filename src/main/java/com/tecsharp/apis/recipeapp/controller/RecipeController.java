@@ -69,6 +69,9 @@ public class RecipeController {
         return ResponseEntity.ok(response);
     }
 
+    /*
+     * REMOVE DEPRECATED METHOD
+     */
     @GetMapping("/all")
     public ResponseEntity<Object> getAllRecipes() {
         try {
@@ -89,6 +92,9 @@ public class RecipeController {
         }
     }
 
+    /*
+     * REMOVE DEPRECATED METHOD FOR PYTHON API
+     */
     @GetMapping("/best")
     public ResponseEntity<Object> getBestRecipes() {
         try {
