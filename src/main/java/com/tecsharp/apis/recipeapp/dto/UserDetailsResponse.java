@@ -1,12 +1,14 @@
 package com.tecsharp.apis.recipeapp.dto;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 @Data
+@ToString
 public class UserDetailsResponse implements Serializable {
 
     @Serial

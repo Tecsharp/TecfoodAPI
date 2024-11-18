@@ -1,8 +1,10 @@
 package com.tecsharp.apis.recipeapp.dto;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class WelcomeMessage{
     private String title;
     private String description;

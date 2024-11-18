@@ -2,11 +2,13 @@ package com.tecsharp.apis.recipeapp.dto;
 
 import com.tecsharp.apis.recipeapp.enums.Difficulty;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Data
+@ToString
 public class RecipeDTO implements Serializable {
 
     @Serial

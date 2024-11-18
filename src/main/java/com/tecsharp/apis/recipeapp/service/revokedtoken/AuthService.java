@@ -11,12 +11,20 @@ public class AuthService {
     private RevokedTokenRepository revokedTokenRepository;
 
     public void revokeToken(String token) {
-        var revokedToken = new RevokedToken(token);
-        revokedTokenRepository.save(revokedToken);
+        try {
+            var revokedToken = new RevokedToken(token);
+            revokedTokenRepository.save(revokedToken);
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred while revoking the token" + e.getMessage(), e);
+        }
     }
 
     public boolean isTokenRevoked(String token) {
-        return revokedTokenRepository.existsByToken(token);
+        try {
+            return revokedTokenRepository.existsByToken(token);
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred while checking if the token is revoked" + e.getMessage(), e);
+        }
     }
 
 }
