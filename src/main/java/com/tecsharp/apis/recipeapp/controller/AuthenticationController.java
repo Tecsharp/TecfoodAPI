@@ -6,7 +6,10 @@ import com.tecsharp.apis.recipeapp.dto.LoginResponse;
 import com.tecsharp.apis.recipeapp.service.revokedtoken.AuthService;
 import com.tecsharp.apis.recipeapp.service.user.UserService;
 import com.tecsharp.apis.recipeapp.service.user.impl.UserDetailsServiceImpl;
+import com.tecsharp.apis.recipeapp.utils.Constants;
 import com.tecsharp.apis.recipeapp.utils.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +46,12 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    Logger log = LoggerFactory.getLogger(AuthenticationController.class);
+    public static final String CONTROLLER_NAME = "AuthenticationController";
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest authRequest) {
+        log.info(Constants.CONTROLLER_METHOD, CONTROLLER_NAME, "authenticate");
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
@@ -69,6 +76,7 @@ public class AuthenticationController {
     }
     @GetMapping("/admin/get/master-token")
     public ResponseEntity<String> getMasterToken() {
+        log.info(Constants.CONTROLLER_METHOD, CONTROLLER_NAME, "getMasterToken");
         final String masterToken = jwtUtil.generateMasterToken();
         return ResponseEntity.ok(masterToken);
     }
@@ -76,6 +84,7 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorization) {
+        log.info(Constants.CONTROLLER_METHOD, CONTROLLER_NAME, "logout");
         String token = authorization.substring(7);
         authService.revokeToken(token);
         return ResponseEntity.ok("Desautenticación exitosa");

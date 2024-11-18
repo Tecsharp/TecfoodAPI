@@ -1,6 +1,7 @@
 package com.tecsharp.apis.recipeapp.utils;
 
 
+import com.tecsharp.apis.recipeapp.exception.InvalidJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -53,10 +54,14 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new InvalidJwtException("Invalid JWT token", e); // Excepción personalizada
+        }
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

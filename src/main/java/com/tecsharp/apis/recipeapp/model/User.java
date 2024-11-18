@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Data
 @Entity
+@ToString(exclude = {"password"})
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

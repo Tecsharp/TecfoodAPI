@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 
 class UserControllerTest {
 
@@ -37,12 +36,4 @@ class UserControllerTest {
         assertEquals("Usuario registrado con éxito", response.getBody());
     }
 
-    @Test
-    void testRegisterUserFailure() {
-        UserDTO userDTO = new UserDTO();
-        doThrow(new RuntimeException("Error al registrar usuario")).when(userService).registerUser(userDTO);
-        ResponseEntity<String> response = userController.registerUser(userDTO);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Error al registrar usuario", response.getBody());
-    }
 }

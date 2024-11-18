@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
@@ -20,79 +18,101 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> findAll() {
-        return recipeRepository.findAll();
+        try {
+            return recipeRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving recipes: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public Recipe findById(Long id) {
-        return recipeRepository.findById(id).orElse(null);
+        try {
+            return recipeRepository.findById(id).orElse(null);
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding recipe with ID " + id + ": " + e.getMessage(), e);
+        }
     }
 
     @Override
     public void saveRecipe(RecipeDTO recipe, User user) {
-
-        var newRecipe = new Recipe();
-        newRecipe.setTitle(recipe.getTitle());
-        newRecipe.setDescription(recipe.getDescription());
-        newRecipe.setPreparationTime(recipe.getPreparationTime());
-        newRecipe.setDifficulty(recipe.getDifficulty());
-        newRecipe.setCategory(recipe.getCategory());
-        newRecipe.setRating(recipe.getRating());
-        newRecipe.setCreatedBy(user);
-        newRecipe.setDateCreation(new Date());
-        newRecipe.setDateModification(new Date());
-        recipeRepository.save(newRecipe);
+        try {
+            var newRecipe = new Recipe();
+            newRecipe.setTitle(recipe.getTitle());
+            newRecipe.setDescription(recipe.getDescription());
+            newRecipe.setPreparationTime(recipe.getPreparationTime());
+            newRecipe.setDifficulty(recipe.getDifficulty());
+            newRecipe.setCategory(recipe.getCategory());
+            newRecipe.setRating(recipe.getRating());
+            newRecipe.setCreatedBy(user);
+            newRecipe.setDateCreation(new Date());
+            newRecipe.setDateModification(new Date());
+            recipeRepository.save(newRecipe);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving the recipe: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-        recipeRepository.deleteById(id);
+        try {
+            recipeRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting recipe with ID " + id + ": " + e.getMessage(), e);
+        }
     }
 
     @Override
     public void delete(Recipe recipe) {
-        /*
-         * Recipe deletion is implemented
-         */
+        try {
+            recipeRepository.delete(recipe);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting recipe: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public Recipe update(RecipeDTO recipeDTO, Long recipeId) {
-
-        /*
-         * CHECK THAT THE USER TRYING TO UPDATE THE RECIPE IS THE SAME ONE WHO CREATED IT
-         * IF YOU ARE AN ADMINISTRATOR YOU CAN UPDATE ANY RECIPE
-         */
-
-        var recipeToUpdate = recipeRepository.findById(recipeId).orElse(null);
-        if (recipeToUpdate != null) {
-            recipeToUpdate.setTitle(recipeDTO.getTitle());
-            recipeToUpdate.setDescription(recipeDTO.getDescription());
-            recipeToUpdate.setPreparationTime(recipeDTO.getPreparationTime());
-            recipeToUpdate.setDifficulty(recipeDTO.getDifficulty());
-            recipeToUpdate.setCategory(recipeDTO.getCategory());
-            recipeToUpdate.setRating(recipeDTO.getRating());
-            recipeToUpdate.setDateModification(new Date());
-            recipeRepository.save(recipeToUpdate);
-            recipeToUpdate.getCreatedBy().setPassword(null);
-            return recipeToUpdate;
-        } else {
-            return null;
+        try {
+            var recipeToUpdate = recipeRepository.findById(recipeId).orElse(null);
+            if (recipeToUpdate != null) {
+                recipeToUpdate.setTitle(recipeDTO.getTitle());
+                recipeToUpdate.setDescription(recipeDTO.getDescription());
+                recipeToUpdate.setPreparationTime(recipeDTO.getPreparationTime());
+                recipeToUpdate.setDifficulty(recipeDTO.getDifficulty());
+                recipeToUpdate.setCategory(recipeDTO.getCategory());
+                recipeToUpdate.setRating(recipeDTO.getRating());
+                recipeToUpdate.setDateModification(new Date());
+                recipeRepository.save(recipeToUpdate);
+                recipeToUpdate.getCreatedBy().setPassword(null);
+                return recipeToUpdate;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating recipe with ID " + recipeId + ": " + e.getMessage(), e);
         }
     }
 
     @Override
     public List<Recipe> findByCategory(String category) {
-        return recipeRepository.findByCategory(category);
+        try {
+            return recipeRepository.findByCategory(category);
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving recipes by category " + category + ": " + e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Recipe> findBestRecipes() {
-        var recipes = recipeRepository.findAll();
-        return recipes.stream()
-                .filter(recipe -> recipe.getRating() >= 4.8)
-                .limit(6)
-                .toList();
+        try {
+            var recipes = recipeRepository.findAll();
+            return recipes.stream()
+                    .filter(recipe -> recipe.getRating() >= 4.8)
+                    .limit(6)
+                    .toList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving best recipes: " + e.getMessage(), e);
+        }
     }
-
 }
